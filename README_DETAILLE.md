@@ -1,8 +1,8 @@
 # TP 2 - Gestion des Étudiants - API REST Spring Boot
 
 ## Auteur
-**Nom** : [Votre Nom]  
-**Classe** : [Votre Classe]  
+**Nom** : [Jemli Ammal]  
+**Classe** : [Devops1]  
 **Date** : 7 avril 2026  
 **GitHub** : [Lien vers votre repository]
 
@@ -341,17 +341,3 @@ Ce projet démontre une maîtrise complète de l'écosystème Spring Boot et des
 - **Déploiement** : Docker et Kubernetes pour production
 - **Documentation** : Swagger interactive pour API
 - **Maintenabilité** : Code structuré et commenté
-
-**Le TP 2 est 100% VALIDÉ avec toutes les exigences implémentées !**
-
----
-
-## Contact
-
-**Email** : [votre-email@example.com]  
-**GitHub** : [votre-repository-github]  
-**LinkedIn** : [votre-profil-linkedin]
-
----
-
-*Développé avec passion et expertise en Spring Boot*
