@@ -59,7 +59,6 @@ public class EtudiantServiceImpl implements EtudiantService {
     }
 
     @Override
-    @Cacheable(value = "etudiants", key = "#id")
     public EtudiantDTO getEtudiantById(Long id) {
         return etudiantRepository.findById(id)
                 .map(this::toDto)

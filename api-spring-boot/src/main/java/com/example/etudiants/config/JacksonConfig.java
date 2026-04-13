@@ -13,15 +13,17 @@ public class JacksonConfig {
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         
-        // Module pour gérer Hibernate lazy loading
-        Hibernate5Module hibernateModule = new Hibernate5Module();
-        hibernateModule.disable(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION);
-        hibernateModule.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
-        hibernateModule.disable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
-        mapper.registerModule(hibernateModule);
-        
         // Module pour gérer Java 8 Time API (LocalDateTime, LocalDate, etc.)
         mapper.registerModule(new JavaTimeModule());
+        
+        // Désactiver le sérialisation des entités non initialisées
+        mapper.configure(com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        
+        // Accepter les propriétés non spécifiées
+        mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        
+        // Accepter les valeurs null
+        mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         
         return mapper;
     }

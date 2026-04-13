@@ -61,7 +61,7 @@ class _EtudiantListPageState extends State<EtudiantListPage> {
 
   Future<void> fetchEtudiants() async {
     final response = await http.get(
-     Uri.parse('http://localhost:8081/api/etudiants'),
+     Uri.parse('http://localhost:8080/api/etudiants-simple'),
     );
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
