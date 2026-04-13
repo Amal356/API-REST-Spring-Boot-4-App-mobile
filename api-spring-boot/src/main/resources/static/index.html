@@ -268,12 +268,20 @@
         // Réinitialiser le formulaire
         function resetForm() {
             document.getElementById('createForm').reset();
-            
+
+            // Vider les champs texte explicitement
+            document.getElementById('cin').value = '';
+            document.getElementById('nom').value = '';
+            document.getElementById('dateNaissance').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('anneePremiereInscription').value = '';
+            document.getElementById('departementId').value = '';
+
             // Rétablir le bouton de création
             const submitBtn = document.querySelector('#createForm button[type="submit"]');
             submitBtn.textContent = 'Créer l\'Étudiant';
             submitBtn.className = 'btn-success';
-            
+
             // Rétablir le gestionnaire d'événement
             document.getElementById('createForm').removeEventListener('submit', handleUpdate);
             document.getElementById('createForm').addEventListener('submit', handleCreate);
