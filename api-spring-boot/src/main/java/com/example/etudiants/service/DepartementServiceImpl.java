@@ -2,6 +2,7 @@ package com.example.etudiants.service;
 
 import com.example.etudiants.dto.DepartementDTO;
 import com.example.etudiants.entity.Departement;
+import com.example.etudiants.mapper.DepartementMapper;
 import com.example.etudiants.repository.DepartementRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -16,37 +17,24 @@ public class DepartementServiceImpl implements DepartementService {
         this.departementRepository = departementRepository;
     }
 
-    private DepartementDTO toDto(Departement entity) {
-        DepartementDTO dto = new DepartementDTO();
-        dto.setId(entity.getId());
-        dto.setNom(entity.getNom());
-        return dto;
-    }
-
-    private Departement toEntity(DepartementDTO dto) {
-        Departement entity = new Departement();
-        entity.setNom(dto.getNom());
-        return entity;
-    }
-
     @Override
     public List<DepartementDTO> getAllDepartements() {
         return departementRepository.findAll().stream()
-                .map(this::toDto)
+                .map(DepartementMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public DepartementDTO getDepartementById(Long id) {
         return departementRepository.findById(id)
-                .map(this::toDto)
+                .map(DepartementMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Departement not found"));
     }
 
     @Override
     public DepartementDTO createDepartement(DepartementDTO dto) {
-        Departement departement = toEntity(dto);
-        return toDto(departementRepository.save(departement));
+        Departement departement = DepartementMapper.toEntity(dto);
+        return DepartementMapper.toDto(departementRepository.save(departement));
     }
 
     @Override
@@ -54,7 +42,7 @@ public class DepartementServiceImpl implements DepartementService {
         Departement existing = departementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Departement not found"));
         existing.setNom(dto.getNom());
-        return toDto(departementRepository.save(existing));
+        return DepartementMapper.toDto(departementRepository.save(existing));
     }
 
     @Override

@@ -118,7 +118,7 @@
         // Charger la liste des étudiants
         async function loadEtudiants() {
             try {
-                const response = await fetch('/api/etudiants-simple');
+                const response = await fetch('/api/etudiants');
                 etudiants = await response.json();
                 renderTable();
             } catch (error) {
