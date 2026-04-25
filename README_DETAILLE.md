@@ -284,6 +284,46 @@ git commit -m "GEST-004-008: création entité Departement et relation"
 - **Documentation** : 100% complète
 - **Déploiement** : 100% prêt
 
+## Configuration Jira Scrum (Q14)
+
+### Projet Jira
+- **Nom** : Gestion des Étudiants
+- **Clé** : GEST
+- **Type** : Scrum
+- **URL** : https://amal356.atlassian.net
+
+### Epic Principale
+**GEST : Gestion des Étudiants**
+
+### Structure des Sprints
+
+```
+Epic : Gestion des Étudiants
+├── Sprint 1 – API REST de base (Partie 1)
+│   ├── GEST-1 : En tant qu'admin, je veux lister les étudiants via GET /api/etudiants
+│   └── GEST-2 : En tant qu'admin, je veux dockeriser l'application avec Docker Compose
+│
+└── Sprint 2 – Enrichissement (Partie 2)
+    ├── GEST-3 : En tant qu'utilisateur, je veux calculer l'âge automatiquement via age()
+    ├── GEST-4 : En tant qu'admin, je veux gérer les départements avec CRUD complet
+    ├── GEST-5 : En tant que développeur, je veux activer le cache Redis sur les endpoints
+    └── GEST-6 : En tant qu'admin, je veux déployer l'application sur Kubernetes K3S
+```
+
+### Board Jira Scrum
+
+![Board Jira Scrum – Gestion des Étudiants](jira-board.png)
+
+### Messages de Commit liés aux tickets Jira
+```bash
+git commit -m "GEST-1: GET /api/etudiants - liste des étudiants"
+git commit -m "GEST-2: Docker Compose avec PostgreSQL et Redis"
+git commit -m "GEST-3: Méthode age() dans entité Etudiant + tests BDD"
+git commit -m "GEST-4: CRUD complet Département + relation ManyToOne"
+git commit -m "GEST-5: Cache Redis avec @Cacheable et @CacheEvict"
+git commit -m "GEST-6: Manifestes Kubernetes K3S déploiement"
+```
+
 ## Problèmes Résolus
 
 ### Conflit Lombok + Jackson + Java 17
