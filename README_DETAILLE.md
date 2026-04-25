@@ -38,59 +38,26 @@ Entity Layer      (JPA/Hibernate)
 ```
 etudiantsapi/
 |
+|-- docker-compose.yml          # Infrastructure (Désormais à la racine)
 |-- api-spring-boot/                 # API REST Spring Boot
 |   |-- src/main/java/com/example/etudiants/
 |   |   |-- controller/              # Contrôleurs REST
-|   |   |   |-- EtudiantController.java
-|   |   |   |-- EtudiantSimpleController.java
-|   |   |   |-- DepartementController.java
-|   |   |   |-- TestController.java
 |   |   |-- service/                 # Services métier
-|   |   |   |-- EtudiantService.java
-|   |   |   |-- EtudiantServiceImpl.java
-|   |   |   |-- DepartementService.java
-|   |   |   |-- DepartementServiceImpl.java
 |   |   |-- repository/              # Accès données
-|   |   |   |-- EtudiantRepository.java
-|   |   |   |-- DepartementRepository.java
 |   |   |-- entity/                  # Entités JPA
-|   |   |   |-- Etudiant.java
-|   |   |   |-- Departement.java
+|   |   |-- mapper/                  # Mappers DTO/Entity (Nouveau)
 |   |   |-- dto/                     # Data Transfer Objects
-|   |   |   |-- EtudiantDTO.java
-|   |   |   |-- EtudiantSimpleDTO.java
-|   |   |   |-- DepartementDTO.java
 |   |   |-- config/                  # Configuration
-|   |   |   |-- JacksonConfig.java
-|   |   |   |-- GlobalExceptionHandler.java
-|   |   |   |-- ResourceNotFoundException.java
-|   |   |   |-- WebConfig.java
-|   |   |-- EtudiantsApplication.java
 |   |-- src/test/java/               # Tests BDD Cucumber
-|   |   |-- CucumberTest.java
-|   |   |-- EtudiantSteps.java
 |   |-- src/main/resources/
 |   |   |-- static/index.html        # Page web
-|   |   |-- application.properties   # Configuration
 |   |-- Dockerfile                   # Image Docker
-|   |-- docker-compose.yml          # Infrastructure
 |   |-- pom.xml                     # Dépendances Maven
-|   |-- docker-build-push.sh         # Script Docker Hub
 |
 |-- k8s/                            # Manifestes Kubernetes
-|   |-- etudiant-deployment.yaml
-|   |-- etudiant-service.yaml
-|   |-- postgres-deployment.yaml
-|   |-- postgres-service.yaml
-|   |-- redis-deployment.yaml
-|   |-- redis-service.yaml
-|
 |-- mobile-app/                      # Application Flutter
 |-- react_native_app/                # Application React Native
-|
-|-- README.md                        # Ce fichier
-|-- RAPPORT_CONFORMITE_TP2.md       # Rapport de conformité
-```
+``````
 
 ## Installation et Démarrage
 
@@ -122,10 +89,10 @@ docker compose logs spring_api
 ```
 
 ### 4. Accéder à l'Application
-- **API REST** : http://localhost:8081/api/etudiants-simple
-- **Documentation Swagger** : http://localhost:8081/swagger-ui.html
-- **Page Web** : http://localhost:8081/
-- **Test API** : http://localhost:8081/api/test
+- **API REST** : http://localhost:8080/api/etudiants
+- **Documentation Swagger** : http://localhost:8080/swagger-ui.html
+- **Page Web** : http://localhost:8080/
+- **Test API** : http://localhost:8080/api/test
 
 ## Fonctionnalités Implémentées
 
@@ -170,13 +137,13 @@ cd api-spring-boot
 ### Tests d'API
 ```bash
 # Test endpoint principal
-curl http://localhost:8081/api/etudiants-simple
+curl http://localhost:8080/api/etudiants
 
 # Test endpoint de test
-curl http://localhost:8081/api/test
+curl http://localhost:8080/api/test
 
 # Test avec filtre année
-curl http://localhost:8081/api/etudiants?annee=2020
+curl http://localhost:8080/api/etudiants?annee=2020
 ```
 
 ### Résultats Attendus
@@ -210,8 +177,8 @@ curl http://localhost:8081/api/etudiants?annee=2020
 ## Documentation Swagger
 
 ### Accès
-- **URL** : http://localhost:8081/swagger-ui.html
-- **Spécification** : http://localhost:8081/v3/api-docs
+- **URL** : http://localhost:8080/swagger-ui.html
+- **Spécification** : http://localhost:8080/v3/api-docs
 
 ### Fonctionnalités
 - **Documentation interactive** : Tester les endpoints directement
