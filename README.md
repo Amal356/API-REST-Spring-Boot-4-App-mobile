@@ -1,55 +1,94 @@
-# Etudiants API
+# Etudiants API - TP1 + TP2 + TP3
 
-Mini-projet Spring Boot pour gérer des étudiants avec PostgreSQL (Docker) et une UI statique (`index.html`).  
-Swagger est activé pour documenter/tester l’API.
+Projet complet autour de la gestion d'etudiants:
+- `etudiant-service` (Spring Boot existant)
+- `grading-service` (microservice notes)
+- `eureka-server` (service discovery)
+- `api-gateway` (point d'entree unique)
+- `frontend` Next.js
+- applications mobiles Flutter et React Native
 
-## Prérequis
-- Java 21 (pour build local)
+## Prerequis
+- Java 21
+- Maven 3.9+
 - Docker + Docker Compose
+- Node.js 20+ (si lancement frontend hors Docker)
 
-## Démarrage (recommandé)
+## Lancement complet (recommande)
 
-Depuis la racine du projet:
+Depuis la racine:
 
 ```bash
 docker compose up -d --build
 ```
 
 ## URLs utiles
-- API: `http://localhost:8080/api/etudiants`
-- Swagger UI: `http://localhost:8080/swagger-ui.html` (redirige vers `/swagger-ui/index.html`)
-- Page web: `http://localhost:8080/`
-- Test API: `http://localhost:8080/api/test`
+- Eureka: `http://localhost:8761`
+- API Gateway: `http://localhost:8080`
+- Etudiant service direct: `http://localhost:8081`
+- Grading service direct: `http://localhost:8082`
+- Frontend Next.js: `http://localhost:3000`
 
-## Endpoints principaux
-- Étudiants
+## Endpoints via API Gateway
+- Etudiants:
   - `GET /api/etudiants`
-  - `GET /api/etudiants?annee=2022`
   - `GET /api/etudiants/{id}`
   - `POST /api/etudiants`
   - `PUT /api/etudiants/{id}`
   - `DELETE /api/etudiants/{id}`
-- Départements
+- Departements:
   - `GET /api/departements`
   - `GET /api/departements/{id}`
   - `POST /api/departements`
   - `PUT /api/departements/{id}`
   - `DELETE /api/departements/{id}`
+- Notes:
+  - `GET /api/notes`
+  - `GET /api/notes/{id}`
+  - `POST /api/notes`
+  - `PUT /api/notes/{id}`
+  - `DELETE /api/notes/{id}`
 
 ## Tests
 
+- Tests backend (service etudiants):
 ```bash
 cd api-spring-boot
 ./mvnw test
 ```
 
-## Docker Hub (image)
+- Test fonctionnel Partie 3:
+```bash
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-part3.ps1
+```
+
+## Docker Hub
+Image utilisee pour le service etudiants:
 - `amal878/etudiant-service:1.0`
 
 ```bash
 docker pull amal878/etudiant-service:1.0
 ```
 
-## Jira (capture)
+## Workflow GitHub (TP3-Q2)
+
+Le depot contient:
+- template issue bug: `.github/ISSUE_TEMPLATE/bug_report.md`
+- template issue feature: `.github/ISSUE_TEMPLATE/feature_request.md`
+- template PR: `.github/pull_request_template.md`
+
+Convention de review:
+- toute fonctionnalite passe par PR vers `version-3` puis `main`
+- au moins une relecture (auto-review si travail solo)
+- commentaires bloquants resolus avant merge
+- ticket Jira lie dans chaque PR
+
+## Jira
+
+- Capture board Sprint 1 + Sprint 2:
 
 ![Board Jira Sprint 1 et Sprint 2](jira-board.png)
+
+- Sprint 3: ajouter votre capture board Sprint 3 ici:
+
+`![Board Jira Sprint 3](<votre-capture-sprint3.png>)`

@@ -1,0 +1,13 @@
+com\example\grading\config\GlobalExceptionHandler.class
+com\example\grading\client\EtudiantClient.class
+com\example\grading\dto\EtudiantRefDTO.class
+com\example\grading\entity\Note.class
+com\example\grading\config\ErrorResponse.class
+com\example\grading\entity\Note$NoteBuilder.class
+com\example\grading\GradingServiceApplication.class
+com\example\grading\controller\NoteController.class
+com\example\grading\dto\NoteDTO$NoteDTOBuilder.class
+com\example\grading\dto\NoteDTO.class
+com\example\grading\service\NoteService.class
+com\example\grading\service\NoteServiceImpl.class
+com\example\grading\repository\NoteRepository.class

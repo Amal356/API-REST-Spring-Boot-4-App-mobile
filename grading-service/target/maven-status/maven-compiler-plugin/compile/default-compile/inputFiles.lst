@@ -1,0 +1,11 @@
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\client\EtudiantClient.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\entity\Note.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\repository\NoteRepository.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\service\NoteService.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\service\NoteServiceImpl.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\dto\NoteDTO.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\GradingServiceApplication.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\dto\EtudiantRefDTO.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\config\GlobalExceptionHandler.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\config\ErrorResponse.java
+C:\Users\amaly\Downloads\etudiantsapi\grading-service\src\main\java\com\example\grading\controller\NoteController.java
