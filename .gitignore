@@ -1,0 +1,5 @@
+# Après que le push soit terminé, colle ça dans ton terminal :
+echo "target/" >> .gitignore
+git add .gitignore
+git commit -m "chore: ajouter .gitignore pour exclure target/"
+git push origin version-3
