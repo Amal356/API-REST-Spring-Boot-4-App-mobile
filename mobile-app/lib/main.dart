@@ -60,8 +60,6 @@ class _EtudiantListPageState extends State<EtudiantListPage> {
   }
 
   Future<void> fetchEtudiants() async {
-    // 10.0.2.2 = IP de la machine hôte depuis l'émulateur Android
-    // Pour un appareil physique, remplacer par l'IP locale de votre machine
     final response = await http.get(
       Uri.parse('http://10.0.2.2:8080/api/etudiants'),
     );

@@ -2,8 +2,10 @@ package com.example.etudiants.repository;
 
 import com.example.etudiants.entity.Etudiant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 import java.util.List;
 
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     List<Etudiant> findByAnneePremiereInscription(int annee);
+    Optional<Etudiant> findByCin(String cin);
 }

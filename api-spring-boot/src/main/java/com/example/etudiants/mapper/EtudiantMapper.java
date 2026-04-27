@@ -2,17 +2,14 @@ package com.example.etudiants.mapper;
 
 import com.example.etudiants.dto.EtudiantDTO;
 import com.example.etudiants.entity.Etudiant;
-import com.example.etudiants.entity.Departement;
+import org.springframework.stereotype.Component;
 
-/**
- * Mapper : assure la conversion DTO <-> Entité Etudiant
- * (Exigence Q8 - Architecture en couches propre)
- */
+@Component
 public class EtudiantMapper {
 
-    public static EtudiantDTO toDto(Etudiant entity) {
+    public EtudiantDTO toDto(Etudiant entity) {
         if (entity == null) return null;
-
+        
         EtudiantDTO dto = new EtudiantDTO();
         dto.setId(entity.getId());
         dto.setCin(entity.getCin());
@@ -21,7 +18,7 @@ public class EtudiantMapper {
         dto.setEmail(entity.getEmail());
         dto.setAnneePremiereInscription(entity.getAnneePremiereInscription());
         dto.setAge(entity.age());
-
+        
         if (entity.getDepartement() != null) {
             dto.setDepartementId(entity.getDepartement().getId());
             dto.setDepartementNom(entity.getDepartement().getNom());
@@ -29,10 +26,11 @@ public class EtudiantMapper {
         return dto;
     }
 
-    public static Etudiant toEntity(EtudiantDTO dto) {
+    public Etudiant toEntity(EtudiantDTO dto) {
         if (dto == null) return null;
-
+        
         Etudiant entity = new Etudiant();
+        entity.setId(dto.getId());
         entity.setCin(dto.getCin());
         entity.setNom(dto.getNom());
         entity.setDateNaissance(dto.getDateNaissance());

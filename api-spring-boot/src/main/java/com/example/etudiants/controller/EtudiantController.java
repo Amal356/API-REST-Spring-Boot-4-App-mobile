@@ -1,13 +1,16 @@
 package com.example.etudiants.controller;
 
+import com.example.etudiants.config.ResourceNotFoundException;
+import com.example.etudiants.entity.Etudiant;
 import com.example.etudiants.dto.EtudiantDTO;
 import com.example.etudiants.service.EtudiantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -15,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/etudiants")
-@Tag(name = "Étudiants", description = "Gestion des étudiants")
 public class EtudiantController {
 
     private final EtudiantService etudiantService;
@@ -24,85 +26,57 @@ public class EtudiantController {
         this.etudiantService = etudiantService;
     }
 
-    private Map<String, Object> toMap(EtudiantDTO dto) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", dto.getId());
-        map.put("cin", dto.getCin());
-        map.put("nom", dto.getNom());
-        map.put("dateNaissance", dto.getDateNaissance());
-        map.put("email", dto.getEmail());
-        map.put("anneePremiereInscription", dto.getAnneePremiereInscription());
-        map.put("age", dto.getAge());
-        map.put("departementId", dto.getDepartementId());
-        map.put("departementNom", dto.getDepartementNom());
-        return map;
-    }
-
     @GetMapping
     @Operation(summary = "Liste tous les étudiants")
-    @ApiResponse(responseCode = "200", description = "Liste retournée avec succès")
-    public List<Map<String, Object>> getAll(@RequestParam(required = false) Integer annee) {
+    public List<EtudiantDTO> getAll(@RequestParam(required = false) Integer annee) {
         if (annee != null) {
-            return etudiantService.findByAnnee(annee).stream()
-                    .map(this::toMap)
-                    .collect(Collectors.toList());
+            return etudiantService.findByAnnee(annee);
         }
-        return etudiantService.getAllEtudiants().stream()
-                .map(this::toMap)
-                .collect(Collectors.toList());
+        return etudiantService.getAllEtudiants();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un étudiant")
-    public ResponseEntity<Map<String, Object>> getById(@PathVariable Long id) {
-        try {
-            EtudiantDTO dto = etudiantService.getEtudiantById(id);
-            return new ResponseEntity<>(toMap(dto), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("error", "Non trouvé"), HttpStatus.NOT_FOUND);
-        }
+    @ApiResponse(responseCode = "200", description = "Etudiant trouvé")
+    @ApiResponse(responseCode = "404", description = "Etudiant non trouvé")
+    public ResponseEntity<EtudiantDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(etudiantService.getEtudiantById(id));
     }
 
     @PostMapping
     @Operation(summary = "Crée un étudiant")
     @ApiResponse(responseCode = "201", description = "Etudiant créé")
-    public ResponseEntity<Map<String, Object>> create(@RequestBody EtudiantDTO etudiantDTO) {
-        try {
-            // Validation des champs requis
-            if (etudiantDTO.getCin() == null || etudiantDTO.getNom() == null ||
-                etudiantDTO.getCin().trim().isEmpty() || etudiantDTO.getNom().trim().isEmpty()) {
-                return new ResponseEntity<>(Map.of("error", "CIN et Nom sont requis"), HttpStatus.BAD_REQUEST);
-            }
-
-            EtudiantDTO created = etudiantService.createEtudiant(etudiantDTO);
-            return new ResponseEntity<>(toMap(created), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("error", "Erreur: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<EtudiantDTO> create(@Valid @RequestBody EtudiantDTO etudiantDTO) {
+        // Validation des champs requis
+        if (etudiantDTO.getCin() == null || etudiantDTO.getNom() == null ||
+            etudiantDTO.getCin().trim().isEmpty() || etudiantDTO.getNom().trim().isEmpty()) {
+            throw new IllegalArgumentException("CIN et Nom sont requis");
         }
+
+        EtudiantDTO created = etudiantService.createEtudiant(etudiantDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un étudiant")
     @ApiResponse(responseCode = "200", description = "Etudiant mis à jour")
-    @ApiResponse(responseCode = "400", description = "Données invalides")
     @ApiResponse(responseCode = "404", description = "Etudiant non trouvé")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id,
-                                                     @RequestBody EtudiantDTO etudiantDTO) {
-        try {
-            if (etudiantDTO.getCin() == null || etudiantDTO.getNom() == null ||
-                etudiantDTO.getCin().trim().isEmpty() || etudiantDTO.getNom().trim().isEmpty()) {
-                return new ResponseEntity<>(Map.of("error", "CIN et Nom sont requis"), HttpStatus.BAD_REQUEST);
-            }
-            EtudiantDTO updated = etudiantService.updateEtudiant(id, etudiantDTO);
-            return new ResponseEntity<>(toMap(updated), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("error", "Erreur: " + e.getMessage()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<EtudiantDTO> update(@PathVariable Long id,
+                                                 @Valid @RequestBody EtudiantDTO etudiantDTO) {
+        // Validation des champs requis
+        if (etudiantDTO.getCin() == null || etudiantDTO.getNom() == null ||
+            etudiantDTO.getCin().trim().isEmpty() || etudiantDTO.getNom().trim().isEmpty()) {
+            throw new IllegalArgumentException("CIN et Nom sont requis");
         }
+
+        EtudiantDTO updated = etudiantService.updateEtudiant(id, etudiantDTO);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un étudiant")
     @ApiResponse(responseCode = "204", description = "Etudiant supprimé")
+    @ApiResponse(responseCode = "404", description = "Etudiant non trouvé")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         etudiantService.deleteEtudiant(id);
         return ResponseEntity.noContent().build();

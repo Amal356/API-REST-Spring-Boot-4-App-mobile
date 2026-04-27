@@ -83,21 +83,42 @@
             </thead>
             <tbody></tbody>
         </table>
-    </div>
-
     <script>
         // Variables globales
         let etudiants = [];
         let departements = [];
+        let currentEditId = null;
         
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
             loadDepartements();
             loadEtudiants();
             
-            // Gestion du formulaire
-            document.getElementById('createForm').addEventListener('submit', handleCreate);
+            // Un SEUL gestionnaire d'événement pour le formulaire
+            document.getElementById('createForm').addEventListener('submit', handleSubmit);
         });
+        
+        // Gestionnaire unique pour le formulaire
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Désactiver le bouton pour éviter les doubles clics
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                if (currentEditId) {
+                    await handleUpdate(currentEditId, data);
+                } else {
+                    await handleCreate(data);
+                }
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
         
         // Charger la liste des départements
         async function loadDepartements() {
@@ -123,7 +144,6 @@
                 renderTable();
             } catch (error) {
                 showMessage('Erreur de chargement des étudiants', 'error');
-                console.error('Erreur:', error);
             }
         }
         
@@ -156,18 +176,11 @@
         }
         
         // Gérer la création d'étudiant
-        async function handleCreate(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
-            
+        async function handleCreate(data) {
             try {
                 const response = await fetch('/api/etudiants', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
@@ -181,49 +194,39 @@
                 }
             } catch (error) {
                 showMessage('Erreur réseau: ' + error.message, 'error');
-                console.error('Erreur:', error);
             }
         }
         
-        // Modifier un étudiant
-        async function editEtudiant(id) {
+        // Préparer la modification
+        function editEtudiant(id) {
             const etudiant = etudiants.find(e => e.id === id);
             if (!etudiant) return;
             
-            // Remplir le formulaire avec les données de l'étudiant
+            currentEditId = id;
+            
+            // Remplir le formulaire
             document.getElementById('cin').value = etudiant.cin;
             document.getElementById('nom').value = etudiant.nom;
+            document.getElementById('dateNaissance').value = etudiant.dateNaissance ? etudiant.dateNaissance.split('T')[0] : '';
             document.getElementById('email').value = etudiant.email || '';
             document.getElementById('anneePremiereInscription').value = etudiant.anneePremiereInscription || '';
             document.getElementById('departementId').value = etudiant.departementId || '';
             
-            // Modifier le bouton du formulaire
+            // Modifier le bouton
             const submitBtn = document.querySelector('#createForm button[type="submit"]');
             submitBtn.textContent = 'Mettre à jour';
             submitBtn.className = 'btn-primary';
             
-            // Changer le gestionnaire d'événement
-            document.getElementById('createForm').removeEventListener('submit', handleCreate);
-            document.getElementById('createForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                handleUpdate(id);
-            });
-            
-            // Scroller vers le formulaire
+            document.querySelector('.form-section h2').textContent = 'Modifier l\'Étudiant';
             document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
         }
         
-        // Gérer la mise à jour d'étudiant
-        async function handleUpdate(id) {
-            const formData = new FormData(document.getElementById('createForm'));
-            const data = Object.fromEntries(formData.entries());
-            
+        // Gérer la mise à jour
+        async function handleUpdate(id, data) {
             try {
                 const response = await fetch(`/api/etudiants/${id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
@@ -237,54 +240,33 @@
                 }
             } catch (error) {
                 showMessage('Erreur réseau: ' + error.message, 'error');
-                console.error('Erreur:', error);
             }
         }
         
         // Supprimer un étudiant
         async function deleteEtudiant(id) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer cet étudiant?')) {
-                return;
-            }
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet étudiant?')) return;
             
             try {
-                const response = await fetch(`/api/etudiants/${id}`, {
-                    method: 'DELETE'
-                });
-                
+                const response = await fetch(`/api/etudiants/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     showMessage('Étudiant supprimé avec succès!', 'success');
                     loadEtudiants();
-                } else {
-                    const error = await response.text();
-                    showMessage('Erreur lors de la suppression: ' + error, 'error');
                 }
             } catch (error) {
                 showMessage('Erreur réseau: ' + error.message, 'error');
-                console.error('Erreur:', error);
             }
         }
         
         // Réinitialiser le formulaire
         function resetForm() {
+            currentEditId = null;
             document.getElementById('createForm').reset();
-
-            // Vider les champs texte explicitement
-            document.getElementById('cin').value = '';
-            document.getElementById('nom').value = '';
-            document.getElementById('dateNaissance').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('anneePremiereInscription').value = '';
-            document.getElementById('departementId').value = '';
-
-            // Rétablir le bouton de création
+            
             const submitBtn = document.querySelector('#createForm button[type="submit"]');
             submitBtn.textContent = 'Créer l\'Étudiant';
             submitBtn.className = 'btn-success';
-
-            // Rétablir le gestionnaire d'événement
-            document.getElementById('createForm').removeEventListener('submit', handleUpdate);
-            document.getElementById('createForm').addEventListener('submit', handleCreate);
+            document.querySelector('.form-section h2').textContent = 'Ajouter un Étudiant';
         }
         
         // Afficher un message
@@ -292,11 +274,7 @@
             const messageDiv = document.getElementById('message');
             messageDiv.textContent = text;
             messageDiv.className = `message ${type}`;
-            
-            // Cacher le message après 5 secondes
-            setTimeout(() => {
-                messageDiv.className = 'message hidden';
-            }, 5000);
+            setTimeout(() => { messageDiv.className = 'message hidden'; }, 5000);
         }
     </script>
 </body>

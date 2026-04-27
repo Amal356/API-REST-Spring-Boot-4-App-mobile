@@ -2,21 +2,20 @@ package com.example.etudiants.mapper;
 
 import com.example.etudiants.dto.DepartementDTO;
 import com.example.etudiants.entity.Departement;
+import org.springframework.stereotype.Component;
 
-/**
- * Mapper : assure la conversion DTO <-> Entité Departement
- * (Exigence Q8 - Architecture en couches propre)
- */
+@Component
 public class DepartementMapper {
 
-    public static DepartementDTO toDto(Departement entity) {
+    public DepartementDTO toDto(Departement entity) {
         if (entity == null) return null;
         return new DepartementDTO(entity.getId(), entity.getNom());
     }
 
-    public static Departement toEntity(DepartementDTO dto) {
+    public Departement toEntity(DepartementDTO dto) {
         if (dto == null) return null;
         Departement entity = new Departement();
+        entity.setId(dto.getId());
         entity.setNom(dto.getNom());
         return entity;
     }

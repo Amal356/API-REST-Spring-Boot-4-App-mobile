@@ -20,7 +20,7 @@ services:
       start_period: 10s
 
   api:
-    build: .
+    build: ./api-spring-boot
     container_name: spring_api
     ports:
       - "8080:8080"
