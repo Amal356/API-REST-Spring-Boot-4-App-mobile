@@ -1,27 +1,55 @@
 package com.example.etudiants.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class EtudiantDTO {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EtudiantDTO implements Serializable {
     @JsonProperty("id")
     private Long id;
 
     @JsonProperty("cin")
+    @NotBlank(message = "Le CIN est obligatoire")
+    @Size(min = 8, max = 8, message = "Le CIN doit contenir 8 caracteres")
+    @Pattern(regexp = "\\d{8}", message = "Le CIN doit contenir uniquement 8 chiffres")
     private String cin;
 
     @JsonProperty("nom")
+    @NotBlank(message = "Le nom est obligatoire")
+    @Size(min = 2, max = 100, message = "Le nom doit contenir entre 2 et 100 caracteres")
     private String nom;
 
     @JsonProperty("dateNaissance")
     @JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message = "La date de naissance est obligatoire")
+    @Past(message = "La date de naissance doit etre dans le passe")
     private LocalDate dateNaissance;
 
     @JsonProperty("email")
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
     private String email;
 
     @JsonProperty("anneePremiereInscription")
+    @Min(value = 2000, message = "L'annee d'inscription doit etre >= 2000")
+    @Max(value = 2100, message = "L'annee d'inscription doit etre <= 2100")
     private int anneePremiereInscription;
 
     @JsonProperty("departementId")
@@ -32,32 +60,4 @@ public class EtudiantDTO {
 
     @JsonProperty("age")
     private int age;
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getCin() { return cin; }
-    public void setCin(String cin) { this.cin = cin; }
-
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-
-    public LocalDate getDateNaissance() { return dateNaissance; }
-    public void setDateNaissance(LocalDate dateNaissance) { this.dateNaissance = dateNaissance; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public int getAnneePremiereInscription() { return anneePremiereInscription; }
-    public void setAnneePremiereInscription(int anneePremiereInscription) { this.anneePremiereInscription = anneePremiereInscription; }
-
-    public Long getDepartementId() { return departementId; }
-    public void setDepartementId(Long departementId) { this.departementId = departementId; }
-
-    public String getDepartementNom() { return departementNom; }
-    public void setDepartementNom(String departementNom) { this.departementNom = departementNom; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
 }

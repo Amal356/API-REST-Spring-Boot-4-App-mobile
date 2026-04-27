@@ -19,8 +19,6 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 10.0.2.2 = IP de la machine hôte depuis l'émulateur Android
-    // Pour un appareil physique, remplacer par l'IP locale de votre machine
     fetch('http://10.0.2.2:8080/api/etudiants')
       .then((res) => res.json())
       .then((data) => {

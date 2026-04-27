@@ -1,5 +1,6 @@
 package com.example.etudiants.controller;
 
+import com.example.etudiants.dto.EtudiantSimpleDTO;
 import com.example.etudiants.entity.Etudiant;
 import com.example.etudiants.repository.EtudiantRepository;
 import org.springframework.web.bind.annotation.*;
@@ -22,31 +23,28 @@ public class EtudiantSimpleController {
     }
 
     @GetMapping
-    public List<Map<String, Object>> getAll() {
+    public List<EtudiantSimpleDTO> getAll() {
         return etudiantRepository.findAll().stream()
-                .map(this::convertToMap)
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    private Map<String, Object> convertToMap(Etudiant etudiant) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", etudiant.getId());
-        map.put("cin", etudiant.getCin());
-        map.put("nom", etudiant.getNom());
-        map.put("dateNaissance", etudiant.getDateNaissance());
-        map.put("email", etudiant.getEmail());
-        map.put("anneePremiereInscription", etudiant.getAnneePremiereInscription());
-        map.put("age", calculateAge(etudiant.getDateNaissance()));
+    private EtudiantSimpleDTO convertToDTO(Etudiant etudiant) {
+        EtudiantSimpleDTO dto = new EtudiantSimpleDTO();
+        dto.setId(etudiant.getId());
+        dto.setCin(etudiant.getCin());
+        dto.setNom(etudiant.getNom());
+        dto.setDateNaissance(etudiant.getDateNaissance());
+        dto.setEmail(etudiant.getEmail());
+        dto.setAnneePremiereInscription(etudiant.getAnneePremiereInscription());
+        dto.setAge(calculateAge(etudiant.getDateNaissance()));
         
         if (etudiant.getDepartement() != null) {
-            map.put("departementId", etudiant.getDepartement().getId());
-            map.put("departementNom", etudiant.getDepartement().getNom());
-        } else {
-            map.put("departementId", null);
-            map.put("departementNom", null);
+            dto.setDepartementId(etudiant.getDepartement().getId());
+            dto.setDepartementNom(etudiant.getDepartement().getNom());
         }
         
-        return map;
+        return dto;
     }
 
     private int calculateAge(LocalDate birthDate) {
